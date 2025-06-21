@@ -1,0 +1,12 @@
+data_ingestion:
+  test_size: 0.2
+
+feature_engineering:
+  max_features: 1500
+  
+train_model:
+  model: "randomforest"
+  n_estimators: 40
+  max_depth: 15
+  
+

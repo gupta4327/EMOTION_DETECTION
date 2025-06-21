@@ -5,6 +5,7 @@ from src.data.dataupl_classes import LocalStorageUploader
 from dotenv import load_dotenv
 import os
 from utils.logger import get_logger
+from src.utils.load_params import load_params
 
 try:
     logger = get_logger()
@@ -23,7 +24,8 @@ def prepare_data(df, drop_cols, test_size):
 #loading the data
 try:
     data_loader = DataLinkLoader(os.getenv("DATA_LINK"))
-    test_size = float(os.getenv("TEST_SIZE"))
+    params = load_params("params.yaml")
+    test_size = params["data_ingestion"]["test_size"]
     raw_data_dir = os.getenv("RAW_DATA_DIR")
     logger.debug("Data loader and environment parameters initialized")
     df = data_loader.load_data()

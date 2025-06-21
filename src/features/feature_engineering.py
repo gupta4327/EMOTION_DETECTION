@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 import pickle
 from src.utils.logger import get_logger
+from src.utils.load_params import load_params
 load_dotenv()
 
 try:
@@ -17,7 +18,8 @@ try:
     preprocess_dir = os.getenv("PREPROCESS_DIR")
     processed_dir = os.getenv("PROCESSED_DIR")
     models_dir = os.getenv("MODELS_DIR")
-    max_features = int(os.getenv("MAX_FEATURES"))
+    params = load_params("params.yaml")
+    max_features = params["feature_engineering"]["max_features"]
     preprocess_train_path = os.path.join(preprocess_dir, "preprocess_train.csv")
     preprocess_test_path = os.path.join(preprocess_dir, "preprocess_test.csv")
 except Exception as e:

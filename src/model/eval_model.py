@@ -5,6 +5,7 @@ import os
 import mlflow
 from src.utils.logger import get_logger
 import json
+from utils.load_params import load_params
  
 load_dotenv()
 
@@ -15,7 +16,7 @@ except Exception as e:
 
 
 try:
-
+    
     processed_dir = os.getenv("PROCESSED_DIR")
     models_dir = os.getenv("MODELS_DIR")
     model_save_path = os.getenv(models_dir, "emotion_detector_model.pkl")
