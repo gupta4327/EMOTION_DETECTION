@@ -21,6 +21,7 @@ class LocalStorageUploader(DataUploader):
         try:
             os.makedirs(self.upload_path, exist_ok=True)
             path = os.path.join(self.upload_path, name)
+            print(path)
             df.to_csv(path, index=False)
         
         except Exception as e:

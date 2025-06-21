@@ -33,7 +33,7 @@ try:
     logger.debug("Train and test loaders initialized")
 
     feature_eng = TextFeatureEngineering(preprocess_train_loader, preprocess_test_loader)
-    vectorizer = feature_eng.apply_tf_idf(col="content",return_vectorizer=True)
+    vectorizer = feature_eng.apply_bow(col="content",return_vectorizer=True, max_features=max_features)
     encoder = feature_eng.label_encode("sentiment", return_encoder=True)
     logger.debug("Vectorization of text and encoding output col is done")
 

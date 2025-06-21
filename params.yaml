@@ -9,4 +9,6 @@ train_model:
   n_estimators: 40
   max_depth: 15
   
+model_eval:
+  tracking_uri: "http://ec2-16-171-116-127.eu-north-1.compute.amazonaws.com:5000/"
 

@@ -25,8 +25,8 @@ stages:
     - feature_engineering.max_features
     outs:
     - data/processed
-    - models/vectorizer.pkl
-    - models/encoder.pkl
+    - models/text_vectorizer.pkl
+    - models/label_encoder.pkl
 
   model_training:
     cmd: python src/model/train_model.py
@@ -44,6 +44,9 @@ stages:
     cmd: python src/model/eval_model.py
     deps:
     - models/emotion_detector_model.pkl
+    - src/model/eval_model.py
+    params:
+    - model_eval.tracking_uri
     outs:
     - reports/metrics.json
     - reports/experiment_info.json

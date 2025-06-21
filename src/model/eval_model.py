@@ -5,7 +5,7 @@ import os
 import mlflow
 from src.utils.logger import get_logger
 import json
-from utils.load_params import load_params
+from src.utils.load_params import load_params
  
 load_dotenv()
 
@@ -19,7 +19,9 @@ try:
     
     processed_dir = os.getenv("PROCESSED_DIR")
     models_dir = os.getenv("MODELS_DIR")
-    model_save_path = os.getenv(models_dir, "emotion_detector_model.pkl")
+    model_save_path = os.path.join(models_dir, "emotion_detector_model.pkl")
+    vectorizer = os.path.join(models_dir, "text_vectorizer.pkl")
+    label_encoder = os.path.join(models_dir, "label_encoder.pkl")
     processed_test_path = os.path.join(processed_dir, "processed_test.csv")
     processed_train_path = os.path.join(processed_dir, "processed_train.csv")
     aws_tracking_url = os.getenv("AWS_TRACKING_URI")
@@ -99,6 +101,10 @@ try:
         
         # Log the metrics file to MLflow
         mlflow.log_artifact(metrics_file_path)
+
+        #log vectorizer and encoder also 
+        mlflow.log_artifact(vectorizer)
+        mlflow.log_artifact(label_encoder)
 
         # Log the model info file to MLflow
         mlflow.log_artifact(exp_info_json_path)

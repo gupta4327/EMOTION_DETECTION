@@ -1,0 +1,111 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/data/data_ingestion.py
+    deps:
+    - path: src/data/data_ingestion.py
+      hash: md5
+      md5: 574f3b9611f20b332e6eccadfbf7d9e9
+      size: 1723
+    params:
+      params.yaml:
+        data_ingestion.test_size: 0.2
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 5555179ba1adb98e191b98d9e115222b.dir
+      size: 890259
+      nfiles: 2
+  data_processing:
+    cmd: python src/data/data_processing.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 5555179ba1adb98e191b98d9e115222b.dir
+      size: 890259
+      nfiles: 2
+    - path: src/data/data_processing.py
+      hash: md5
+      md5: bb5eb508461568f480742c174e84d065
+      size: 1677
+    outs:
+    - path: data/interim
+      hash: md5
+      md5: 0747a870fe7f2205f1a342768f6513fb.dir
+      size: 633126
+      nfiles: 2
+  feature_engineering:
+    cmd: python src/features/feature_engineering.py
+    deps:
+    - path: data/interim
+      hash: md5
+      md5: 0747a870fe7f2205f1a342768f6513fb.dir
+      size: 633126
+      nfiles: 2
+    - path: src/features/feature_engineering.py
+      hash: md5
+      md5: 9aac52f5ca402347ebbf36914980ddc2
+      size: 2463
+    params:
+      params.yaml:
+        feature_engineering.max_features: 1500
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: a7810a7790f9ad2dfb4ce897fffaf5b7.dir
+      size: 31151930
+      nfiles: 2
+    - path: models/label_encoder.pkl
+      hash: md5
+      md5: 1ea0a5eb803c672b7cce40c4c1a94381
+      size: 265
+    - path: models/text_vectorizer.pkl
+      hash: md5
+      md5: 9d340ac2212b7dadd27f450669fea062
+      size: 41131
+  model_training:
+    cmd: python src/model/train_model.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: a7810a7790f9ad2dfb4ce897fffaf5b7.dir
+      size: 31151930
+      nfiles: 2
+    - path: src/model/train_model.py
+      hash: md5
+      md5: 4416ee560bd3962557f5d5aa2c3233bb
+      size: 1333
+    params:
+      params.yaml:
+        train_model.max_depth: 15
+        train_model.model: randomforest
+        train_model.n_estimators: 40
+    outs:
+    - path: models/emotion_detector_model.pkl
+      hash: md5
+      md5: 811d72b157b1acb69ff01d42b31cb4a5
+      size: 868225
+  model_evaluation:
+    cmd: python src/model/eval_model.py
+    deps:
+    - path: models/emotion_detector_model.pkl
+      hash: md5
+      md5: 811d72b157b1acb69ff01d42b31cb4a5
+      size: 868225
+    - path: src/model/eval_model.py
+      hash: md5
+      md5: 422a570bec008e2056005948364373d5
+      size: 3882
+    params:
+      params.yaml:
+        model_eval.tracking_uri: 
+          http://ec2-16-171-116-127.eu-north-1.compute.amazonaws.com:5000/
+    outs:
+    - path: reports/experiment_info.json
+      hash: md5
+      md5: a54ea0b2338aaedc1195bacd1abe1e7c
+      size: 79
+    - path: reports/metrics.json
+      hash: md5
+      md5: ef40eb98a8e41b9ca21a47e96988dcd8
+      size: 357

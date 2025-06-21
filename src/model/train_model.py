@@ -15,7 +15,7 @@ except Exception as e:
 try:
     processed_dir = os.getenv("PROCESSED_DIR")
     models_dir = os.getenv("MODELS_DIR")
-    model_save_path = os.getenv(models_dir, "emotion_detector_model.pkl")
+    model_save_path = os.path.join(models_dir, "emotion_detector_model.pkl")
     processed_train_path = os.path.join(processed_dir, "processed_train.csv")
     params = load_params("params.yaml")
     model_name = params["train_model"]["model"]
