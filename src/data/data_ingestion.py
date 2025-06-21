@@ -4,7 +4,7 @@ from src.data.dataload_classes import DataLinkLoader
 from src.data.dataupl_classes import LocalStorageUploader
 from dotenv import load_dotenv
 import os
-from utils.logger import get_logger
+from src.utils.logger import get_logger
 from src.utils.load_params import load_params
 
 try:
