@@ -51,6 +51,16 @@ stages:
     - reports/metrics.json
     - reports/experiment_info.json
 
+  model_registery:
+    cmd: python src/model/model_register.py
+    deps:
+    - src/model/model_register.py
+    - reports/experiment_info.json
+    params:
+    - model_register.tracking_uri
+    
+   
+
 
 
 

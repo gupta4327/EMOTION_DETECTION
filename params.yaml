@@ -2,7 +2,7 @@ data_ingestion:
   test_size: 0.2
 
 feature_engineering:
-  max_features: 1500
+  max_features: 3000
   
 train_model:
   model: "randomforest"
@@ -10,5 +10,8 @@ train_model:
   max_depth: 15
   
 model_eval:
+  tracking_uri: "http://ec2-16-171-116-127.eu-north-1.compute.amazonaws.com:5000/"
+
+model_register:
   tracking_uri: "http://ec2-16-171-116-127.eu-north-1.compute.amazonaws.com:5000/"
 

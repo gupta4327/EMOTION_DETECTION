@@ -48,12 +48,12 @@ stages:
       size: 2463
     params:
       params.yaml:
-        feature_engineering.max_features: 1500
+        feature_engineering.max_features: 3000
     outs:
     - path: data/processed
       hash: md5
-      md5: a7810a7790f9ad2dfb4ce897fffaf5b7.dir
-      size: 31151930
+      md5: 581d9163430f9bc5496c0542b9598917.dir
+      size: 62285562
       nfiles: 2
     - path: models/label_encoder.pkl
       hash: md5
@@ -61,15 +61,15 @@ stages:
       size: 265
     - path: models/text_vectorizer.pkl
       hash: md5
-      md5: 9d340ac2212b7dadd27f450669fea062
-      size: 41131
+      md5: eed9f5ad9a8e2373905d92e86b9c4fcf
+      size: 82960
   model_training:
     cmd: python src/model/train_model.py
     deps:
     - path: data/processed
       hash: md5
-      md5: a7810a7790f9ad2dfb4ce897fffaf5b7.dir
-      size: 31151930
+      md5: 581d9163430f9bc5496c0542b9598917.dir
+      size: 62285562
       nfiles: 2
     - path: src/model/train_model.py
       hash: md5
@@ -83,15 +83,15 @@ stages:
     outs:
     - path: models/emotion_detector_model.pkl
       hash: md5
-      md5: 811d72b157b1acb69ff01d42b31cb4a5
-      size: 868225
+      md5: cfe9ba334dc99c3834f98f761fdaa6ea
+      size: 748529
   model_evaluation:
     cmd: python src/model/eval_model.py
     deps:
     - path: models/emotion_detector_model.pkl
       hash: md5
-      md5: 811d72b157b1acb69ff01d42b31cb4a5
-      size: 868225
+      md5: cfe9ba334dc99c3834f98f761fdaa6ea
+      size: 748529
     - path: src/model/eval_model.py
       hash: md5
       md5: 422a570bec008e2056005948364373d5
@@ -103,9 +103,24 @@ stages:
     outs:
     - path: reports/experiment_info.json
       hash: md5
-      md5: a54ea0b2338aaedc1195bacd1abe1e7c
+      md5: d20e2492ce27dd341246ec802963cf79
       size: 79
     - path: reports/metrics.json
       hash: md5
-      md5: ef40eb98a8e41b9ca21a47e96988dcd8
-      size: 357
+      md5: abd21bcf76c4eadf281b702fa9eefb86
+      size: 360
+  model_registery:
+    cmd: python src/model/model_register.py
+    deps:
+    - path: reports/experiment_info.json
+      hash: md5
+      md5: d20e2492ce27dd341246ec802963cf79
+      size: 79
+    - path: src/model/model_register.py
+      hash: md5
+      md5: 1061565b929ce9bac48819502118b2e9
+      size: 2377
+    params:
+      params.yaml:
+        model_register.tracking_uri: 
+          http://ec2-16-171-116-127.eu-north-1.compute.amazonaws.com:5000/
