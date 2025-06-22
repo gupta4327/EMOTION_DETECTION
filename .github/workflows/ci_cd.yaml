@@ -29,6 +29,10 @@ jobs:
       - name: Load env vars from YAML
         run: |
           python scripts/load_env_from_yaml.py common_vars.yaml
+
+      - name: print data link 
+        run: |
+          echo "data link is: $DATA_LINK"  
       
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v2
