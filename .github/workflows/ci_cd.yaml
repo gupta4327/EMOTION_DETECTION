@@ -25,6 +25,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -e .
+
+      - name: Load env vars from YAML
+        run: |
+          python scripts/load_env_from_yaml.py commmon_vars.yml
       
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v2
