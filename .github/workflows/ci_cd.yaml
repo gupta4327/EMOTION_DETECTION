@@ -1,0 +1,38 @@
+
+name : Emotion_Detection_CI_CD_Pipeline
+
+on: push
+
+jobs:
+  emotion_detection:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+
+    steps:      
+
+      - name: code checkout
+        uses: action/checkout@v3
+
+      - name: python setup
+        uses: action/setup-python@v2
+        with:
+          python-version: 3.10
+        
+      - name: install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: configure aws credentials
+        uses: aws-action/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      
+      - name: pipeline run
+        run: |
+          dvc repro  
+      
+
