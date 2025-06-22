@@ -1,19 +1,19 @@
 
 
 #DATA INGESTION PARAMS
-DATA_LINK : "https://raw.githubusercontent.com/campusx-official/jupyter-masterclass/main/tweet_emotions.csv"
-TEST_SIZE : "0.2"
-RAW_DATA_DIR : "./data/raw"
+DATA_LINK : https://raw.githubusercontent.com/campusx-official/jupyter-masterclass/main/tweet_emotions.csv
+TEST_SIZE : 0.2
+RAW_DATA_DIR : ./data/raw
 
 #PREPROCESS PARAMS 
-PREPROCESS_DIR : "./data/interim"
+PREPROCESS_DIR : ./data/interim
 
 #FEATURE ENG PARAMETERS
-MAX_FEATURES : "2500"
-PROCESSED_DIR : "./data/processed"
+MAX_FEATURES : 2500
+PROCESSED_DIR : ./data/processed
 
 #MODEL PARAMS 
-MODELS_DIR : "./models"
-MODEL_NAME : "randomforest"
-REPORTS_DIR : "./reports"
-AWS_TRACKING_URI : "http://ec2-16-171-116-127.eu-north-1.compute.amazonaws.com:5000/"
+MODELS_DIR : ./models
+MODEL_NAME : randomforest
+REPORTS_DIR : ./reports
+AWS_TRACKING_URI : http://ec2-16-171-116-127.eu-north-1.compute.amazonaws.com:5000/
