@@ -44,5 +44,17 @@ jobs:
       - name: pipeline run
         run: |
           dvc repro  
+
+      - name: test model
+        run: |
+          python -m unittest tests/test_model.py
+
+      - name: promote model to production
+        run: |
+          python scripts/promote_model.py  
+
+      - name: Run Flask app tests
+        if: success()
+        run: python -m unittest tests/test_flask_app.py
       
 

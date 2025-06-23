@@ -84,20 +84,52 @@ except Exception as e:
 app = Flask(__name__)
 
 # load model from model registry
-def get_latest_model_version(model_name):
-    client = mlflow.MlflowClient()
-    latest_version = client.get_latest_versions(model_name, stages=["Production"])
-    if not latest_version:
-        latest_version = client.get_latest_versions(model_name, stages=["None"])
-    return latest_version[0].version if latest_version else None
+def get_latest_version(model_name, alias):
+    client_mlflow = mlflow.tracking.MlflowClient()
+    latest_version = client_mlflow.get_model_version_by_alias(name=model_name, alias=alias)
+    if latest_version:
+        run_id = latest_version.run_id
+        return latest_version.version, run_id
+    else: 
+        return None,None
+    
+def get_vectorizer_and_encoder(vectorizer_name, encoder_name, run_id):
 
-model_name = "emotion_detector_model"
-model_version = get_latest_model_version(model_name)
+    try:
+        vectorizer_path = mlflow.artifacts.download_artifacts(artifact_path=vectorizer_name, run_id=run_id)
+        encoder_path = mlflow.artifacts.download_artifacts(artifact_path=encoder_name, run_id=run_id)
 
-model_uri = f'models:/{model_name}/{model_version}'
-model = mlflow.pyfunc.load_model(model_uri)
+        with open(vectorizer_path, "rb") as f:
+            text_vectorizer = pickle.load(f)
+        
+        with open(encoder_path, "rb") as f:
+            label_encoder = pickle.load(f)
 
-vectorizer = pickle.load(open('models/text_vectorizer.pkl','rb'))
+        if text_vectorizer:
+
+            if label_encoder:
+                return text_vectorizer, label_encoder
+            else:
+                raise RuntimeError(f"Cannot load the label encoder")
+        else:
+            raise RuntimeError(f"Cannot load the text vectorizer")
+        
+    except Exception as e:
+        raise RuntimeError(f"Failed in getting vectorizer and encoder step with error : {e}")
+
+try:    
+    model_name = "emotion_detector_model"
+    model_version, run_id = get_latest_version(model_name, "production")
+
+    model_uri = f'models:/{model_name}/{model_version}'
+    model = mlflow.pyfunc.load_model(model_uri)
+
+    vectorizer_name = "text_vectorizer.pkl" 
+    encoder_name = "label_encoder.pkl"
+    vectorizer, encoder = get_vectorizer_and_encoder(vectorizer_name, encoder_name, run_id)
+    vectorizer = pickle.load(open('models/text_vectorizer.pkl','rb'))
+except Exception as e:
+    raise RuntimeError(f"Failed in model loading from MLflow with error : {e}")
 
 @app.route('/')
 def home():
@@ -124,6 +156,8 @@ def predict():
     # prediction
     result = model.predict(features_df)
 
+    result = encoder.inverse_transform(result)
+    
     # show
     return render_template('index.html', result=result[0])
 
