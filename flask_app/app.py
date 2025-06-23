@@ -156,8 +156,15 @@ def predict():
     # prediction
     result = model.predict(features_df)
 
+    print(f" before convert :{result}")
+
+    print(encoder.classes_)
+
+
     result = encoder.inverse_transform(result)
-    
+
+    print(f" after convert :{result}")
+
     # show
     return render_template('index.html', result=result[0])
 
