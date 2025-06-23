@@ -54,5 +54,5 @@ def get_latest_version(model_name, alias):
     else: 
         return None
     
-if __name__ == "main":
+if __name__ == "__main__":
     promote_model()
